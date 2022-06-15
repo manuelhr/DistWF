@@ -1,0 +1,101 @@
+﻿{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "DistWF.Adapter",
+    "version": "1.0"
+  },
+  "paths": {
+    "/Calculate": {
+      "post": {
+        "tags": [
+          "Calculation"
+        ],
+        "operationId": "Calculate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CalculationRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CalculationRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CalculationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/CalculationResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CalculationResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CalculationResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CalculationRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "serviceName": {
+            "type": "string",
+            "nullable": true
+          },
+          "operand1": {
+            "type": "number",
+            "format": "double"
+          },
+          "operand2": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "CalculationResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          },
+          "backEndName": {
+            "type": "string",
+            "nullable": true
+          },
+          "result": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      }
+    }
+  }
+}

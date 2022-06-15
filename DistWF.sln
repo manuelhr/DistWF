@@ -5,13 +5,15 @@ VisualStudioVersion = 16.0.31829.152
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DistWF.Common", "DistWF.Common\DistWF.Common.csproj", "{32F91E57-033B-4C23-8C9E-45DCF967ED4C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistWF.Engine", "DistWF.Engine\DistWF.Engine.csproj", "{BE45FE9B-3D81-4AB6-977F-7B00EEE77688}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DistWF.Engine", "DistWF.Engine\DistWF.Engine.csproj", "{BE45FE9B-3D81-4AB6-977F-7B00EEE77688}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistWF.Controller", "DistWF.Controller\DistWF.Controller.csproj", "{3DF3C6A6-4AD2-41E2-8888-44602CCB686B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DistWF.Controller", "DistWF.Controller\DistWF.Controller.csproj", "{3DF3C6A6-4AD2-41E2-8888-44602CCB686B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistWF.Adapter", "DistWF.Adapter\DistWF.Adapter.csproj", "{F4C94565-9604-4EB3-8449-3D7C0F776417}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DistWF.Adapter", "DistWF.Adapter\DistWF.Adapter.csproj", "{F4C94565-9604-4EB3-8449-3D7C0F776417}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistWF.Backend", "DistWF.Backend\DistWF.Backend.csproj", "{2AC4030E-AC84-42B7-A01D-F4F6AF6B2A68}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DistWF.Backend", "DistWF.Backend\DistWF.Backend.csproj", "{2AC4030E-AC84-42B7-A01D-F4F6AF6B2A68}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistWF.Host", "DistWF.Host\DistWF.Host.csproj", "{57F98C6E-1A58-44E8-A6CA-0089865F812D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{2AC4030E-AC84-42B7-A01D-F4F6AF6B2A68}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AC4030E-AC84-42B7-A01D-F4F6AF6B2A68}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2AC4030E-AC84-42B7-A01D-F4F6AF6B2A68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{57F98C6E-1A58-44E8-A6CA-0089865F812D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{57F98C6E-1A58-44E8-A6CA-0089865F812D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{57F98C6E-1A58-44E8-A6CA-0089865F812D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{57F98C6E-1A58-44E8-A6CA-0089865F812D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
