@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DistWF.Engine\DistWF.Engine.csproj" />
+    <ProjectReference Include="..\DistWF.Common\DistWF.Common.csproj" />
   </ItemGroup>
 
 
