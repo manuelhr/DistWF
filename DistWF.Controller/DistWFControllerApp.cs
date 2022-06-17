@@ -1,5 +1,4 @@
 ﻿using DistWF.Common.Model;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
 using System.Net.Http;
@@ -11,14 +10,11 @@ namespace DistWF.Controller
 {
     public class DistWFControllerApp
     {
-        private readonly ILogger _logger;
         private IHttpClientFactory _httpFactory { get; set; }
 
         public DistWFControllerApp(
-            ILogger<DistWFControllerApp> logger,
             IHttpClientFactory httpFactory)
         {
-            _logger = logger;
             _httpFactory = httpFactory;
         }
 
@@ -40,13 +36,13 @@ namespace DistWF.Controller
                 }
                 else
                 {
-                    response.Message = $"{httpResponse.StatusCode} - {httpResponse.ReasonPhrase}";
+                    response.Message = $"{Messages.ErrorInvokingService}: {httpResponse.StatusCode} - {httpResponse.ReasonPhrase}";
                 }
             }
             catch (Exception ex)
             {
 
-                response.Message = $"Error al invocar al servicio: {ex.Message}";
+                response.Message = $"{Messages.ErrorInvokingService}: {ex.Message}";
             }
             finally
             {
@@ -56,10 +52,5 @@ namespace DistWF.Controller
             return response;
 
         }
-
-    }
-    public class CalculationAPIMethods
-    {
-        public static string Calculate = "Calculate";
     }
 }

@@ -14,14 +14,14 @@ namespace DistWF.Controller
     {
         static async Task Main(string[] args)
         {
-            Console.WriteLine("Bienvenido a DistWF.Controller App");
+            Console.WriteLine($"{Messages.Welcome}...");
             var host = CreateHostBuilder(args).Build();
             var logger = host.Services.GetService<ILogger<Program>>();
             while (true)
             {
                 var operands = TryGetOperands();
                 var appService = host.Services.GetService<DistWFControllerApp>();
-                var response = await appService.Calculate(new Common.Model.CalculationRequest()
+                var response = await appService.Calculate(new CalculationRequest()
                 {
                     Operand1 = operands.Item1,
                     ServiceName = operands.Item2,
@@ -66,54 +66,45 @@ namespace DistWF.Controller
         static Tuple<decimal, string, decimal> TryGetOperands()
         {
             decimal operand1 = 0, operand2 = 0;
-            string operationName = null;
+            string operation = null;
             bool operand1HasValue = false, operationNameHasValue = false, operand2HasValue = false;
-            #region 1) Lectura del primer operando
+
+            #region 1) Operand 1 reading
             while (!operand1HasValue)
             {
-                Console.WriteLine("Por favor, ingrese el primer operando:");
+                Console.WriteLine($"{Messages.EnterFirstOperand}:");
                 string tmpOperand1 = Console.ReadLine();
                 operand1HasValue = decimal.TryParse(tmpOperand1, out operand1);
             }
             #endregion
 
-            #region Lectura de la operación
+            #region 2) Operation reading
             while (!operationNameHasValue)
             {
-                Console.WriteLine("Por favor, ingrese la operación ( +, - , * , / )");
+                Console.WriteLine($"{Messages.EnterOperator}:");
                 string tmpOperation = Console.ReadLine();
-                switch (tmpOperation)
+                operation = tmpOperation switch
                 {
-                    case "+":
-                        operationName = CalculationServiceNames.Sum;
-                        break;
-                    case "-":
-                        operationName = CalculationServiceNames.Substract;
-                        break;
-                    case "*":
-                        operationName = CalculationServiceNames.Multiply;
-                        break;
-                    case "/":
-                        operationName = CalculationServiceNames.Divide;
-                        break;
-                    default:
-                        operationName = null;
-                        break;
-                }
-                operationNameHasValue = !string.IsNullOrWhiteSpace(operationName);
+                    "+" => CalculationServiceNames.Sum,
+                    "-" => CalculationServiceNames.Substract,
+                    "*" => CalculationServiceNames.Multiply,
+                    "/" => CalculationServiceNames.Divide,
+                    _ => null,
+                };
+                operationNameHasValue = !string.IsNullOrWhiteSpace(operation);
             }
             #endregion
 
-            #region Lectura del segundo operando
+            #region 3) Operand 2 reading
             while (!operand2HasValue)
             {
-                Console.WriteLine("Por favor, ingrese el segundo operando:");
+                Console.WriteLine($"{Messages.EnterSecondOperand}:");
                 string tmpOperand2 = Console.ReadLine();
                 operand2HasValue = decimal.TryParse(tmpOperand2, out operand2);
             }
             #endregion
 
-            return new Tuple<decimal, string, decimal>(operand1, operationName, operand2);
+            return new Tuple<decimal, string, decimal>(operand1, operation, operand2);
         }
     }
 }

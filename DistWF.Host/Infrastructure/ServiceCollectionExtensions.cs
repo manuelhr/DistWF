@@ -12,6 +12,20 @@ namespace DistWF.Host.Infrastructure
 {
     public static class ServiceCollectionExtensions
     {
+        public static void ImportTypesFromSharedAssemblies(this IServiceCollection services,
+                                                                                               string sharedAssembliesDirectoryPath,
+                                                                                               IConfiguration configuration)
+        {
+            var sharedDirFileInfo = new DirectoryInfo(sharedAssembliesDirectoryPath);
+            if (sharedDirFileInfo.Exists == false) throw new Exception(Messages.AssemblyDirectoryNotFound);
+            var assemblyFiles = new DirectoryInfo(sharedDirFileInfo.FullName).GetFiles("*.dll");
+            if (assemblyFiles.Length == 0) throw new Exception(Messages.AssemblyDirectoryDoesNotContainAssemblies);
+
+            services.InstallTypesFromEnginesAsembly(assemblyFiles.GetAssembly(DistWFAssemblyNames.Engine));
+            services.InstallTypesFromBackEndAssembly(assemblyFiles.GetAssembly(DistWFAssemblyNames.BackEnd), configuration);
+            services.InstallTypesFromAdapterAsembly(assemblyFiles.GetAssembly(DistWFAssemblyNames.Adapter));
+        }
+
         static void InstallTypesFromBackEndAssembly(
           this IServiceCollection services,
           Assembly targetAssembly,
@@ -61,41 +75,20 @@ namespace DistWF.Host.Infrastructure
             }
         }
 
-        public static void ImportTypesFromSharedAssemblies(this IServiceCollection services,
-                                                                                                string sharedAssembliesDirectoryPath,
-                                                                                                IConfiguration configuration)
+        static void InstallTypesFromAdapterAsembly(
+        this IServiceCollection services,
+        Assembly targetAssembly)
         {
-            var sharedDirFileInfo = new DirectoryInfo(sharedAssembliesDirectoryPath);
-            if (sharedDirFileInfo.Exists == false) throw new Exception("Directorio de ensamblados compartidos no encontrado.");
-            var assemblyFiles = new DirectoryInfo(sharedDirFileInfo.FullName).GetFiles("*.dll");
-            if (assemblyFiles.Length == 0) throw new Exception("No se encontró ensamblados en el directorio compartido.");
-
-            #region 1) DistWF.Engine
-            var engineAssemblyFileInfo = assemblyFiles.FirstOrDefault(x => string.Equals(x.Name,
-                                                                                                                    DistWFAssemblyNames.Engine,
-                                                                                                                    StringComparison.OrdinalIgnoreCase));
-            if (engineAssemblyFileInfo == null) throw new Exception($"Ensamblado '{DistWFAssemblyNames.Engine}' no encontrado.");
-            Assembly engineAssembly = Assembly.LoadFrom(engineAssemblyFileInfo.FullName);
-            services.InstallTypesFromEnginesAsembly(engineAssembly);
-            #endregion
-            #region 2) DistWF.Backend
-            var backendAssemblyFileInfo = assemblyFiles.FirstOrDefault(x => string.Equals(x.Name,
-                                                                                                                   DistWFAssemblyNames.BackEnd,
-                                                                                                                   StringComparison.OrdinalIgnoreCase));
-            Assembly backendAssembly = Assembly.LoadFrom(backendAssemblyFileInfo.FullName);
-            if (backendAssembly == null) throw new Exception($"Ensamblado '{DistWFAssemblyNames.BackEnd}' no encontrado.");
-            services.InstallTypesFromBackEndAssembly(backendAssembly, configuration);
-            #endregion
-            #region 3) DistWF.Adapter
-            var adapterAssemblyFileInfo = assemblyFiles.FirstOrDefault(x => string.Equals(x.Name,
-                                                                                                                   DistWFAssemblyNames.Adapter,
-                                                                                                                   StringComparison.OrdinalIgnoreCase));
-            Assembly adapterAssembly = Assembly.LoadFrom(adapterAssemblyFileInfo.FullName);
-            if (adapterAssembly == null) throw new Exception($"Ensamblado '{DistWFAssemblyNames.Adapter}' no encontrado.");
-            services.AddMvc().AddApplicationPart(adapterAssembly);
-            #endregion
-
+            services.AddMvc().AddApplicationPart(targetAssembly);
         }
 
+        static Assembly GetAssembly(this FileInfo[] assemblyFiles, string targetAssemblyName)
+        {
+            var assemblyFileInfo = assemblyFiles.FirstOrDefault(x => string.Equals(x.Name,
+                                                                                                                      targetAssemblyName,
+                                                                                                                      StringComparison.OrdinalIgnoreCase));
+            if (assemblyFileInfo == null) throw new Exception($"{Messages.AssemblyNotFound} ({targetAssemblyName}).");
+            return Assembly.LoadFrom(assemblyFileInfo.FullName);
+        }
     }
 }

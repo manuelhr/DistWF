@@ -37,10 +37,11 @@ namespace DistWF.Backend
                     response = _calculationService.Divide(request);
                     break;
                 default:
-                    response.Message = "Solicitud no válida. Servicio no reconocido.";
+                    response.Message = $"{Messages.InvalidRequest}: {Messages.ServiceNotFound}";
                     break;
             }
             response.BackEndName = _currentBackEndName;
+
             #region Logueo de resultados
             if (response.Success)
             {
