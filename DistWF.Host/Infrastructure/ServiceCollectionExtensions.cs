@@ -8,7 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace DistWF.Adapter.Infrastructure
+namespace DistWF.Host.Infrastructure
 {
     public static class ServiceCollectionExtensions
     {
@@ -85,6 +85,14 @@ namespace DistWF.Adapter.Infrastructure
             Assembly backendAssembly = Assembly.LoadFrom(backendAssemblyFileInfo.FullName);
             if (backendAssembly == null) throw new Exception($"Ensamblado '{DistWFAssemblyNames.BackEnd}' no encontrado.");
             services.InstallTypesFromBackEndAssembly(backendAssembly, configuration);
+            #endregion
+            #region 3) DistWF.Adapter
+            var adapterAssemblyFileInfo = assemblyFiles.FirstOrDefault(x => string.Equals(x.Name,
+                                                                                                                   DistWFAssemblyNames.Adapter,
+                                                                                                                   StringComparison.OrdinalIgnoreCase));
+            Assembly adapterAssembly = Assembly.LoadFrom(adapterAssemblyFileInfo.FullName);
+            if (adapterAssembly == null) throw new Exception($"Ensamblado '{DistWFAssemblyNames.Adapter}' no encontrado.");
+            services.AddMvc().AddApplicationPart(adapterAssembly);
             #endregion
 
         }

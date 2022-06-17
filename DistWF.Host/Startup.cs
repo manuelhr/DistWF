@@ -1,10 +1,12 @@
+using DistWF.Host.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using AdapterClient = DistWF.Host.DistWF_AdapterClient;
+using System.IO;
+
 namespace DistWF.Host
 {
     public class Startup
@@ -27,8 +29,23 @@ namespace DistWF.Host
                 client.BaseAddress = new Uri(adapterURL);
             })
         ;
-            services.AddTransient<AdapterClient.IClient, AdapterClient.Client>();
+            services.AddLogging();
 
+            #region Detección de directorio de librerías compartidas e importación de ensamblados
+            string sharedLibPath = null;
+            var sharedLibPathConfigValue = Configuration.GetValue<string>("SharedLibPath") ?? "DistWF.SharedLibs";
+            if (Directory.Exists(sharedLibPathConfigValue))
+            {
+                sharedLibPath = sharedLibPathConfigValue;
+            }
+            else
+            {
+                string rootSolutionPath = new DirectoryInfo(Environment.CurrentDirectory).Parent.FullName;
+                sharedLibPath = Path.Combine(rootSolutionPath, sharedLibPathConfigValue);
+            }
+            services.ImportTypesFromSharedAssemblies(sharedLibPath, Configuration);
+            #endregion
+            
             services.AddControllers();
             services.AddSwaggerGen();
         }

@@ -11,5 +11,7 @@
     {
         public const string BackEnd = "DistWF.Backend.dll";
         public const string Engine = "DistWF.Engine.dll";
+        public const string Adapter = "DistWF.Adapter.dll";
+        
     }
 }
